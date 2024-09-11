@@ -1,0 +1,67 @@
+% Function 1: Image Preprocessing
+% Read the image
+A = imread("Import Image");
+
+% Convert the image to grayscale
+B = rgb2gray(A);
+
+% Apply Canny edge detection to the grayscale image
+K = edge(B, 'canny');
+
+% Convert the grayscale image to double
+C = im2double(B);
+
+% Binarize the grayscale image
+img_bw = imbinarize(B);
+
+% Function 2: Calculate Box Counting
+[N, R] = boxcount(img_bw);
+
+% Function 3: Calculate Fractal Dimension
+FD = -diff(log(N)) ./ diff(log(R));
+
+% Display the Fractal Dimension
+disp('Fractal Dimension (FD):');
+mean_FD = mean(FD);
+disp(['Mean Fractal Dimension (FD): ', num2str(mean_FD)]);
+
+% Function 4: Create a figure to display the images
+figure;
+subplot(2, 2, 1);
+imshow(A);
+title('Original Image');
+
+subplot(2, 2, 2);
+imshow(B, []);
+title('Grayscale Image');
+
+subplot(2, 2, 3);
+imshow(img_bw, []);
+title('Binarized Image');
+
+subplot(2, 2, 4);
+imshow(K);
+title('Canny Edge Detection');
+
+% Function 5: Plot Fractal Dimension
+figure;
+plot(FD, 'LineWidth', 2);
+xlabel('Number of Values');
+ylabel('Fractal Dimension (FD)');
+title('Fractal Dimension Plot');
+
+% Function 6: Automatic Classification of Visual Complexity
+if mean_FD >= 1 && mean_FD < 1.4
+    visualComplexity = 'Low Visual Complexity (Low Texture and Low Composition or Low Texture and High Composition)';
+elseif mean_FD >= 1.4 && mean_FD < 1.5
+    visualComplexity = 'Moderate Visual Complexity';
+elseif mean_FD >= 1.5 && mean_FD <= 2
+    visualComplexity = 'High Visual Complexity (High Texture and Low Composition or High Texture and High Composition)';
+else
+    visualComplexity = 'Undefined Visual Complexity';
+end
+
+% Display Classification Results
+disp(['Visual Complexity Classification: ', visualComplexity]);
+
+
